@@ -25,8 +25,9 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
+# The PROJECT root is where the caller invokes this script from; skill files resolve via $Root.
+$ProjectRoot = (Get-Location).Path
 $Root = Split-Path -Parent $PSScriptRoot
-Set-Location $Root
 $Temp = Join-Path $Root 'temp'
 New-Item -ItemType Directory -Path $Temp -Force | Out-Null
 
@@ -68,6 +69,7 @@ Rule: a change touching permissions, feature keys, or schema is FEATURE minimum 
 Write-Host "P1/P2 scaffold written -> temp/task-scaffold.md"
 
 # ---- P2.5: environment readback -----------------------------------------------------
+if (-not [System.IO.Path]::IsPathRooted($Config)) { $Config = Join-Path $ProjectRoot $Config }
 $envLog = Join-Path $Temp 'env-check.log'
 if ($SkipEnv) {
     "P2.5 SKIPPED by explicit flag" | Set-Content -Path $envLog -Encoding UTF8

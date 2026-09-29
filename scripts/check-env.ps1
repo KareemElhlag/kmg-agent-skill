@@ -22,8 +22,9 @@ param(
 )
 
 $ErrorActionPreference = 'Continue'
+# The PROJECT root is where the caller invokes this script from; the skill root is only a fallback.
+$ProjectRoot = (Get-Location).Path
 $Root = Split-Path -Parent $PSScriptRoot
-Set-Location $Root
 
 $failures = @()
 $warnings = @()
@@ -33,6 +34,9 @@ function Warn([string]$m) { $script:warnings += $m; Write-Host "WARN: $m" -Foreg
 function Ok([string]$m)   { Write-Host "OK: $m" -ForegroundColor Green }
 
 # ---- 0. Load local config -----------------------------------------------------
+# Relative -Config paths resolve against the project root (the invocation directory),
+# not the skill directory.
+if (-not [System.IO.Path]::IsPathRooted($Config)) { $Config = Join-Path $ProjectRoot $Config }
 $cfg = $null
 if (Test-Path $Config) {
     try { $cfg = Get-Content $Config -Raw | ConvertFrom-Json } catch { Warn "could not parse $Config : $($_.Exception.Message)" }
@@ -65,8 +69,10 @@ if (-not $psOut) {
             $startedAt = [datetime]$insp
             $ageMin = [int]((New-TimeSpan $startedAt (Get-Date)).TotalMinutes)
 
-            # newest binary under the repo (bin/obj debug outputs), if any
-            $newestBin = Get-ChildItem -Path $Root -Recurse -Include '*.dll' -File -ErrorAction SilentlyContinue |
+            # newest binary under the project (repoRoot from config wins), if any
+            $scanRoot = $ProjectRoot
+            if ($cfg -and $cfg.paths -and $cfg.paths.repoRoot) { $scanRoot = $cfg.paths.repoRoot }
+            $newestBin = Get-ChildItem -Path $scanRoot -Recurse -Include '*.dll' -File -ErrorAction SilentlyContinue |
                 Where-Object { $_.FullName -match '\\bin\\' } |
                 Sort-Object LastWriteTime -Descending | Select-Object -First 1
             if ($newestBin -and $newestBin.LastWriteTime -gt $startedAt) {

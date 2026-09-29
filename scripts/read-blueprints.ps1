@@ -19,8 +19,9 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+# The PROJECT root is where the caller invokes this script from; skill files resolve via $Root.
+$ProjectRoot = (Get-Location).Path
 $Root = Split-Path -Parent $PSScriptRoot
-Set-Location $Root
 
 function Show-File {
     param([string]$File, [string]$Title)
@@ -32,11 +33,12 @@ function Show-File {
 }
 
 # ---- 1. The skill's own blueprints ------------------------------------------
-Show-File 'templates/structure.md' 'STRUCTURE  (layers, blast radius)'
-Show-File 'templates/business.md'  'BUSINESS   (rules, money invariants, Paid-Pack Triple)'
-Show-File 'templates/workflow.md'  'WORKFLOW   (task protocol, run record)'
+Show-File (Join-Path $Root 'templates/structure.md') 'STRUCTURE  (layers, blast radius)'
+Show-File (Join-Path $Root 'templates/business.md')  'BUSINESS   (rules, money invariants, Paid-Pack Triple)'
+Show-File (Join-Path $Root 'templates/workflow.md')  'WORKFLOW   (task protocol, run record)'
 
 # ---- 2. The project's own blueprints, if configured --------------------------
+if (-not [System.IO.Path]::IsPathRooted($Config)) { $Config = Join-Path $ProjectRoot $Config }
 if (Test-Path $Config) {
     try {
         $cfg = Get-Content $Config -Raw | ConvertFrom-Json
