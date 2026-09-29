@@ -1,0 +1,57 @@
+# Created By: Karim-(KaReem Elhlag)-Abdelhady
+# =====================================================================
+# kmg-agent-skill — project configuration TEMPLATE (public, committable)
+# =====================================================================
+# Copy this file to `project.config.json` and fill in your real values.
+# `project.config.json` is git-ignored: it NEVER leaves your machine.
+# Only this template is committed — it must contain zero real paths,
+# ports, hosts, or identifiers.
+# =====================================================================
+
+{
+  "projectName": "your-project-name",
+  "description": "One line: what this project is.",
+
+  "paths": {
+    "repoRoot": "C:/path/to/your/repo",
+    "webApp": "src/web",
+    "services": {
+      "exampleService": "services/example-service"
+    },
+    "docs": {
+      "playbook": "docs/PLAYBOOK.md",
+      "blueprints": "docs/blueprints",
+      "testRuns": "docs/test-runs"
+    }
+  },
+
+  "ports": {
+    "web": 3000,
+    "api": 5000,
+    "additional": {}
+  },
+
+  "api": {
+    "baseUrl": "http://localhost:5000",
+    "healthEndpoint": "/health",
+    "openApiSpec": "/swagger/v1/swagger.json"
+  },
+
+  "runtime": {
+    "containerized": true,
+    "composeFile": "docker-compose.yml",
+    "services": ["example-api", "example-web"],
+    "note": "P2.5: read `docker ps` + `docker inspect` before claiming any change is visible."
+  },
+
+  "scratch": {
+    "tempDir": "temp",
+    "artifactsPrefix": "probe-",
+    "note": "All intermediate artifacts go here; summarized into the durable record, never committed."
+  },
+
+  "knowledge": {
+    "fieldLessons": "field-lessons.md",
+    "note": "Local-only lessons log; git-ignored, never published."
+  }
+}

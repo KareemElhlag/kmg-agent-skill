@@ -1,0 +1,6 @@
+# kmg-agent-skill: isolated scratch (never commit probe output)
+temp/
+
+# kmg-agent-skill: local-only configuration & field knowledge (never leaves this machine)
+project.config.json
+field-lessons.md

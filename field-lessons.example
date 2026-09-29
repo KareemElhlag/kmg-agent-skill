@@ -1,0 +1,37 @@
+# Created By: Karim-(KaReem Elhlag)-Abdelhady
+# =====================================================================
+# kmg-agent-skill — field-lessons TEMPLATE (public, committable)
+# =====================================================================
+# Copy this file to `field-lessons.md` and record your real lessons there.
+# `field-lessons.md` is git-ignored: it NEVER leaves your machine — it may
+# contain identifiers, container names, and incident details from your
+# own environments. Only this sanitized template is committed.
+# =====================================================================
+
+# Field Lessons — Living Memory
+
+> One lesson per defect that was actually met in production. A lesson without
+> a reproducible incident is an opinion; keep opinions out of this log.
+> Format: date · incident (root cause) · the rule it produced · how to detect it early.
+
+---
+
+## Template entry (copy, fill, delete nothing silently)
+
+### [YYYY-MM-DD] — Short incident name
+- **Symptom:** what was observed (the false green, the invisible feature, the wrong number…)
+- **Root cause:** what actually happened beneath the symptom.
+- **Reconciliation trap:** why the wrong answer still "made sense" on the surface.
+- **Rule produced:** the protocol/rule now encoded in the playbook (P#, §#).
+- **Early detection:** the check that would have caught it in minutes, not hours.
+
+---
+
+## Example (shape only — replace with your own incidents)
+
+### [2026-01-15] — Stale container serving pre-change binaries
+- **Symptom:** verified code change, green suite, yet the endpoint served the old behavior for hours.
+- **Root cause:** the serving container was started before the change; a rebuild without restart is not a deploy.
+- **Reconciliation trap:** the code was provably correct, so everyone trusted the runtime instead of reading it.
+- **Rule produced:** P2.5 — read `docker ps` + `docker inspect` (started-at vs change-time) before any visibility claim.
+- **Early detection:** `check-env.ps1` at session start; any container older than the newest binary is a stop.
