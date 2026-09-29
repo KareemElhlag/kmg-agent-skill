@@ -39,12 +39,26 @@ function Ok([string]$m)   { Write-Host "OK: $m" -ForegroundColor Green }
 if (-not [System.IO.Path]::IsPathRooted($Config)) { $Config = Join-Path $ProjectRoot $Config }
 $cfg = $null
 if (Test-Path $Config) {
-    try { $cfg = Get-Content $Config -Raw | ConvertFrom-Json } catch { Warn "could not parse $Config : $($_.Exception.Message)" }
+    try {
+        # Tolerate leading '#'/'//' comment lines (PS 5.1 ConvertFrom-Json does not).
+        $raw = (Get-Content $Config | Where-Object { $_.TrimStart() -notmatch '^(#|//)' }) -join "`n"
+        $cfg = $raw | ConvertFrom-Json
+    } catch { Warn "could not parse $Config : $($_.Exception.Message)" }
 } else {
     Warn "$Config not found - copy project.config.example to project.config.json and fill it."
 }
 
 # ---- 1. Docker: available? containers fresh? -----------------------------------
+# newest binary: scan service directories only (never the whole repo -
+# node_modules trees make a full sweep minutes-slow). Config-driven:
+# paths.services entries when present, else the repoRoot. Computed once.
+$scanDirs = @()
+if ($cfg -and $cfg.paths -and $cfg.paths.services) {
+    $cfg.paths.services.PSObject.Properties | ForEach-Object { $scanDirs += Join-Path $ProjectRoot $_.Value }
+}
+if ($scanDirs.Count -eq 0 -and $cfg -and $cfg.paths -and $cfg.paths.repoRoot) { $scanDirs += $cfg.paths.repoRoot }
+if ($scanDirs.Count -eq 0) { $scanDirs += $ProjectRoot }
+
 $docker = Get-Command docker -ErrorAction SilentlyContinue
 if (-not $docker) {
     Write-Host 'SKIP: docker not on PATH - container sync cannot be verified here.'
@@ -54,9 +68,23 @@ if (-not $docker) {
 $psOut = & docker ps --format '{{.Names}}|{{.Image}}|{{.Status}}|{{.RunningFor}}' 2>$null
 if ($LASTEXITCODE -ne 0) { Write-Host 'FAIL: docker present but not readable (daemon down or permissions).' -ForegroundColor Red; exit 2 }
 
+$newestBin = $scanDirs | ForEach-Object {
+    Get-ChildItem -Path $_ -Recurse -Filter '*.dll' -File -ErrorAction SilentlyContinue |
+        Where-Object { $_.FullName -match '\\bin\\' }
+} | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+
 if (-not $psOut) {
     Write-Host 'OK: docker reachable; no containers running (nothing to go stale).'
 } else {
+    # Compute the newest binary ONCE - it is a property of the tree, not of any
+    # single container, and a 20s scan must not run once per container.
+    $scanDirs = @()
+    if ($cfg -and $cfg.paths -and $cfg.paths.services) {
+        $cfg.paths.services.PSObject.Properties | ForEach-Object { $scanDirs += Join-Path $ProjectRoot $_.Value }
+    }
+    if ($scanDirs.Count -eq 0 -and $cfg -and $cfg.paths -and $cfg.paths.repoRoot) { $scanDirs += $cfg.paths.repoRoot }
+    if ($scanDirs.Count -eq 0) { $scanDirs += $ProjectRoot }
+
     Write-Host '--- running containers ---'
     $psOut | ForEach-Object {
         $parts = $_ -split '\|'
@@ -67,21 +95,7 @@ if (-not $psOut) {
         $insp = & docker inspect $parts[0] --format '{{.State.StartedAt}}' 2>$null
         if ($LASTEXITCODE -eq 0) {
             $startedAt = [datetime]$insp
-            $ageMin = [int]((New-TimeSpan $startedAt (Get-Date)).TotalMinutes)
 
-            # newest binary: scan service directories only (never the whole repo -
-            # node_modules trees make a full sweep minutes-slow). Config-driven:
-            # paths.services entries when present, else the repoRoot.
-            $scanDirs = @()
-            if ($cfg -and $cfg.paths -and $cfg.paths.services) {
-                $cfg.paths.services.PSObject.Properties | ForEach-Object { $scanDirs += Join-Path $ProjectRoot $_.Value }
-            }
-            if ($scanDirs.Count -eq 0 -and $cfg -and $cfg.paths -and $cfg.paths.repoRoot) { $scanDirs += $cfg.paths.repoRoot }
-            if ($scanDirs.Count -eq 0) { $scanDirs += $ProjectRoot }
-            $newestBin = $scanDirs | ForEach-Object {
-                Get-ChildItem -Path $_ -Recurse -Filter '*.dll' -File -ErrorAction SilentlyContinue |
-                    Where-Object { $_.FullName -match '\\bin\\' }
-            } | Sort-Object LastWriteTime -Descending | Select-Object -First 1
             if ($newestBin -and $newestBin.LastWriteTime -gt $startedAt) {
                 $staleMin = [int]((New-TimeSpan $startedAt $newestBin.LastWriteTime).TotalMinutes)
                 if ($staleMin -ge $StaleMinutes) {

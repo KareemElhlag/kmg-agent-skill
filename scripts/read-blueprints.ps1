@@ -41,7 +41,8 @@ Show-File (Join-Path $Root 'templates/workflow.md')  'WORKFLOW   (task protocol,
 if (-not [System.IO.Path]::IsPathRooted($Config)) { $Config = Join-Path $ProjectRoot $Config }
 if (Test-Path $Config) {
     try {
-        $cfg = Get-Content $Config -Raw | ConvertFrom-Json
+        $raw = (Get-Content $Config | Where-Object { $_.TrimStart() -notmatch '^(#|//)' }) -join "`n"
+        $cfg = $raw | ConvertFrom-Json
         $bpDir = $cfg.paths.docs.blueprints
         if ($bpDir -and (Test-Path $bpDir)) {
             $files = Get-ChildItem $bpDir -File -Include *.md -Recurse -ErrorAction SilentlyContinue
