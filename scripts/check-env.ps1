@@ -79,7 +79,7 @@ if (-not $psOut) {
             if ($scanDirs.Count -eq 0 -and $cfg -and $cfg.paths -and $cfg.paths.repoRoot) { $scanDirs += $cfg.paths.repoRoot }
             if ($scanDirs.Count -eq 0) { $scanDirs += $ProjectRoot }
             $newestBin = $scanDirs | ForEach-Object {
-                Get-ChildItem -Path $_ -Recurse -Include '*.dll' -File -ErrorAction SilentlyContinue |
+                Get-ChildItem -Path $_ -Recurse -Filter '*.dll' -File -ErrorAction SilentlyContinue |
                     Where-Object { $_.FullName -match '\\bin\\' }
             } | Sort-Object LastWriteTime -Descending | Select-Object -First 1
             if ($newestBin -and $newestBin.LastWriteTime -gt $startedAt) {
@@ -93,14 +93,23 @@ if (-not $psOut) {
 }
 
 # ---- 2. Ports from config actually listening ------------------------------------
+# Test-NetConnection waits tens of seconds per closed port; a raw TcpClient with a
+# 1500ms connect timeout answers the same question a hundred times faster.
+function Test-PortListening([int]$Port) {
+    $client = New-Object System.Net.Sockets.TcpClient
+    try {
+        $task = $client.ConnectAsync('127.0.0.1', $Port)
+        if ($task.Wait(1500)) { return $client.Connected } else { return $false }
+    } catch { return $false } finally { $client.Dispose() }
+}
+
 if ($cfg -and $cfg.ports) {
     Write-Host '--- ports ---'
     foreach ($prop in $cfg.ports.PSObject.Properties) {
         $port = $prop.Value
         if ($port -isnot [int]) { continue }
-        $listening = Test-NetConnection -ComputerName 127.0.0.1 -Port $port -InformationLevel Quiet -WarningAction SilentlyContinue
-        if ($listening) { Ok ("port {0} ({1}) is listening" -f $port, $prop.Name) }
-        else            { Warn ("port {0} ({1}) is NOT listening - is the runtime up?" -f $port, $prop.Name) }
+        if (Test-PortListening $port) { Ok ("port {0} ({1}) is listening" -f $port, $prop.Name) }
+        else                          { Warn ("port {0} ({1}) is NOT listening - is the runtime up?" -f $port, $prop.Name) }
     }
 }
 
