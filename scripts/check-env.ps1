@@ -69,12 +69,19 @@ if (-not $psOut) {
             $startedAt = [datetime]$insp
             $ageMin = [int]((New-TimeSpan $startedAt (Get-Date)).TotalMinutes)
 
-            # newest binary under the project (repoRoot from config wins), if any
-            $scanRoot = $ProjectRoot
-            if ($cfg -and $cfg.paths -and $cfg.paths.repoRoot) { $scanRoot = $cfg.paths.repoRoot }
-            $newestBin = Get-ChildItem -Path $scanRoot -Recurse -Include '*.dll' -File -ErrorAction SilentlyContinue |
-                Where-Object { $_.FullName -match '\\bin\\' } |
-                Sort-Object LastWriteTime -Descending | Select-Object -First 1
+            # newest binary: scan service directories only (never the whole repo -
+            # node_modules trees make a full sweep minutes-slow). Config-driven:
+            # paths.services entries when present, else the repoRoot.
+            $scanDirs = @()
+            if ($cfg -and $cfg.paths -and $cfg.paths.services) {
+                $cfg.paths.services.PSObject.Properties | ForEach-Object { $scanDirs += Join-Path $ProjectRoot $_.Value }
+            }
+            if ($scanDirs.Count -eq 0 -and $cfg -and $cfg.paths -and $cfg.paths.repoRoot) { $scanDirs += $cfg.paths.repoRoot }
+            if ($scanDirs.Count -eq 0) { $scanDirs += $ProjectRoot }
+            $newestBin = $scanDirs | ForEach-Object {
+                Get-ChildItem -Path $_ -Recurse -Include '*.dll' -File -ErrorAction SilentlyContinue |
+                    Where-Object { $_.FullName -match '\\bin\\' }
+            } | Sort-Object LastWriteTime -Descending | Select-Object -First 1
             if ($newestBin -and $newestBin.LastWriteTime -gt $startedAt) {
                 $staleMin = [int]((New-TimeSpan $startedAt $newestBin.LastWriteTime).TotalMinutes)
                 if ($staleMin -ge $StaleMinutes) {
