@@ -2,7 +2,7 @@
 
 # kmg-agent-skill — Deliverable Summary
 
-**Date:** 2026-10-03 (v2.0.0 — quality, performance, network, and job gates added)
+**Date:** 2026-10-03 (v2.1.0 — scoped architecture, design, and security roles added)
 **Owner:** Karim-(KaReem Elhlag)-Abdelhady · kareemelhlag@gmail.com
 **Location:** `C:\Users\hp\source\repos\kmg-agent-skill\` (fully independent of any project repository tree)
 **Purpose:** portable AI-engineering skill distilled from the SaaS ERP platform experience — GitHub-ready.
@@ -17,7 +17,7 @@ The package is split by contract:
 - **Local (git-ignored, never leaves the machine):** `temp/` (scratch artifacts), `project.config.json`
   (real paths/ports/API bases), `field-lessons.md` (the agent's private incident log).
 
-## Files delivered (18 committed + .gitignore + 2 local)
+## Files delivered (21 committed + .gitignore + 2 local)
 
 | File | Content |
 |---|---|
@@ -26,6 +26,9 @@ The package is split by contract:
 | `QUALITY_GATES.md` | Feature creation/review workflow, required gates, complexity thresholds, and decision vocabulary. |
 | `PERFORMANCE.md` | Measurement surfaces, baselines, deltas, and default budgets. |
 | `NETWORK_AND_JOBS.md` | Network, SignalR, messaging, outbox, retry, idempotency, and job rules. |
+| `roles/general-software-architect.md` | Language-agnostic architecture, design, and security role. |
+| `roles/dotnet-architect.md` | .NET architecture, DDD, EF Core, API, worker, and security role. |
+| `roles/frontend-architect.md` | React/TypeScript/UI architecture, UX, API contract, and security role. |
 | `README.md` | Usage for any AI agent (load order, protocol, evidence, templates, local-layer setup, pipeline automation), the strict Data Privacy & Security notice, IP/licensing/attribution. |
 | `SUMMARY.md` | This file — deliverable inventory and verification record. |
 | `project.config.example` | Committable config template: paths, ports, API bases, runtime map, scratch and knowledge conventions. |

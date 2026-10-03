@@ -1,7 +1,7 @@
 ---
 name: kmg-agent-skill
 description: Advanced portable engineering standard for AI agents building and operating complex multi-tenant SaaS ERP systems — task lifecycle protocol, clean architecture, container/runtime synchronization, financial entitlement integrity, and fail-closed execution discipline.
-version: 2.0.0
+version: 2.1.0
 author: Karim-(KaReem Elhlag)-Abdelhady
 license: Proprietary — all rights reserved. See README.md.
 ---
@@ -114,6 +114,24 @@ The workflow is fail-closed: intake → architecture map → baseline → implem
 runtime verification → performance delta → review decision → evidence registration. A missing measurement is
 `BLOCKED`, not a pass. A warning is tracked with an owner and due stage; warnings are never silently discarded.
 
+## 6.1 Role routing
+
+Every task uses exactly one primary role and may consult the other roles when the blast radius crosses layers. All three
+roles are software architects/designers and security-aware reviewers; their specialization changes the evidence they
+require, not the quality bar:
+
+- `roles/general-software-architect.md`: use for language-agnostic design, service boundaries, data contracts,
+  threat modeling, maintainability, and cross-cutting reviews.
+- `roles/dotnet-architect.md`: use when the change includes C#, .NET, ASP.NET Core, EF Core, MediatR, workers, or
+  .NET service-to-service communication.
+- `roles/frontend-architect.md`: use when the change includes React, TypeScript, Vite, Tailwind, browser state,
+  accessibility, UI security, or frontend-to-API contracts.
+
+Route by the files and runtime actually touched, not by the feature title. If both backend and frontend are changed,
+select the dominant risk as primary and explicitly run the other role's contract checklist. The general role remains the
+tie-breaker for architecture and security decisions. Never apply a role's framework preference against the repository's
+existing architecture without recording the trade-off.
+
 ## 7. The non-negotiables (read this even if you read nothing else)
 
 1. **Classify before you touch.** Every change gets exactly one class with its trigger written down; a change
@@ -138,6 +156,7 @@ kmg-agent-skill/
 ├── PLAYBOOK.md              ← the full engineering playbook (P0→P11, architecture, money, gates)
 ├── README.md                ← usage, data-privacy & security policy, licensing & attribution
 ├── SUMMARY.md               ← deliverable inventory & verification record
+├── roles/                   ← scoped architecture, design, and security review roles
 ├── project.config.example   ← committable config template — copy to project.config.json (local only)
 ├── field-lessons.example    ← committable lessons template — copy to field-lessons.md (local only)
 ├── templates/

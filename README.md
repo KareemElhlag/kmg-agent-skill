@@ -1,6 +1,6 @@
 <!-- Created By: Karim-(KaReem Elhlag)-Abdelhady -->
 
-# kmg-agent-skill v2.0.0
+# kmg-agent-skill v2.1.0
 
 **Author / Developer / Owner:** Karim-(KaReem Elhlag)-Abdelhady
 **Contact Email:** kareemelhlag@gmail.com
@@ -21,6 +21,7 @@ defect class, not to generic best practice.
 | `QUALITY_GATES.md` | Feature/review gates, complexity limits, maintainability rules, and accept/reject vocabulary. |
 | `PERFORMANCE.md` | Baselines, deltas, API/database/UI/job metrics, and default performance budgets. |
 | `NETWORK_AND_JOBS.md` | HTTP, SignalR, messaging, retry, idempotency, outbox, and job rules. |
+| `roles/*.md` | General, .NET, and Frontend architect/designer/security review roles with routing rules. |
 | `templates/structure.md` | Template for documenting a project's layer/membership structure and blast-radius mapping. |
 | `templates/business.md` | Template for documenting business rules, commercial packs, entitlements, and money invariants. |
 | `templates/workflow.md` | Template for task run records: stages, results, deltas, denominators, residue. |

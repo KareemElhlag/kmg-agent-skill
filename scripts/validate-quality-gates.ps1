@@ -11,7 +11,7 @@ $files = Get-ChildItem -Path $Root -File -Recurse | Where-Object { $_.FullName -
 $content = $files | Get-Content -Raw
 $secretPatterns = @('AKIA[0-9A-Z]{16}','-----BEGIN (RSA|OPENSSH|EC) PRIVATE KEY-----','password\s*[:=]\s*[^<\s]+','connectionstrings?\s*[:=]')
 foreach ($pattern in $secretPatterns) { if ($content -match $pattern) { Write-Error "Potential secret pattern detected: $pattern"; exit 1 } }
-if ((Get-Content (Join-Path $Root 'SKILL.md') -Raw) -notmatch 'version: 2\.0\.0') { Write-Error 'SKILL.md is not version 2.0.0'; exit 1 }
+if ((Get-Content (Join-Path $Root 'SKILL.md') -Raw) -notmatch 'version: 2\.1\.0') { Write-Error 'SKILL.md is not version 2.1.0'; exit 1 }
 Write-Output 'QUALITY_GATES_VALIDATION=PASS'
 Write-Output "REQUIRED_FILES=$($required.Count)"
 Write-Output "SECRET_PATTERNS_CHECKED=$($secretPatterns.Count)"
