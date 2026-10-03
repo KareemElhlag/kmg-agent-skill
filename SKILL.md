@@ -1,7 +1,11 @@
 ---
 name: kmg-agent-skill
 description: Advanced portable engineering standard for AI agents building and operating complex multi-tenant SaaS ERP systems — task lifecycle protocol, clean architecture, container/runtime synchronization, financial entitlement integrity, and fail-closed execution discipline.
+<<<<<<< HEAD
 version: 2.1.0
+=======
+version: 2.2.0
+>>>>>>> f6fbf45 (feat: add senior monitor certification stage)
 author: Karim-(KaReem Elhlag)-Abdelhady
 license: Proprietary — all rights reserved. See README.md.
 ---
@@ -9,6 +13,8 @@ license: Proprietary — all rights reserved. See README.md.
 <!-- Created By: Karim-(KaReem Elhlag)-Abdelhady -->
 
 # KMG Agent Skill — Portable SaaS/ERP Engineering Standard
+
+> v2.2.0 adds the mandatory **Senior Monitor** post-work certification stage.
 
 ## 1. What this skill is
 
@@ -186,6 +192,13 @@ Each was met in production; each produced a wrong answer that *reconciled*:
 - **The free renewal** — a paid pack whose entitlement flag was never written by the fulfilment path.
 - **The double bill** — a pack billed by both a dedicated renewal line and the generic pack line.
 - **The stale record** — a registry row asserting a state the code has left.
+
+## Senior Monitor (mandatory post-work certification)
+
+After implementation, focused review, and verification, every repository-changing task must pass an independent
+Senior Monitor stage before it can be reported as complete. It re-checks the request, plan, diff, architecture,
+security, tenant isolation, tests, performance, runtime state, networking, jobs, and rollback. A green build alone is
+not certification. See `SENIOR_MONITOR.md` and run `scripts/senior-monitor.ps1`.
 
 ## 10. Versioning
 

@@ -270,3 +270,14 @@ Honesty is part of the protocol. Every unenforced behavior is recorded as a **Kn
 a next action: the failing SLO, the raw SQL in the wrong layer, the secret-scan that is documented but not CI-gated,
 the surface unproven at its required tiers. A gap imported into a mandatory baseline is a lie; a baseline that hides
 its gaps is worse. Re-baseline measurements per feature rather than quoting old numbers as current truth.
+# Senior Monitor (mandatory post-work certification)
+
+Senior Monitor is the final independent stage after implementation, focused tests, and normal review. It must not
+rubber-stamp the implementer's conclusion.
+
+Required checks: scope, architecture boundaries, tenant/security invariants, money/inventory correctness, tests,
+performance, runtime visibility, networking, jobs, observability, and rollback. Decisions are `CERTIFIED`,
+`CERTIFIED_WITH_RESIDUE`, `REWORK_REQUIRED`, or `BLOCKED`. Only the first two may be reported as complete; residue
+requires an owner, due stage, and explicit risk. Missing evidence is blocked, never an implicit pass.
+
+Use `SENIOR_MONITOR.md` for the rubric and `scripts/senior-monitor.ps1` for deterministic checks.

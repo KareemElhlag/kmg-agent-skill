@@ -2,6 +2,8 @@
 
 # kmg-agent-skill v2.1.0
 
+Current release: **2.2.0**
+
 **Author / Developer / Owner:** Karim-(KaReem Elhlag)-Abdelhady
 **Contact Email:** kareemelhlag@gmail.com
 
@@ -33,6 +35,8 @@ defect class, not to generic best practice.
 | `scripts/check-env.ps1` | P2.5 container/runtime sync readback: stale-container detection, port checks, dotnet watch vs run. |
 | `scripts/run-task-pipeline.ps1` | The pre-flight engine: automates P0 intake → P1/P2 scaffolds → P2.5 env readback → P3 blueprints → P4 searches in one command (~92% of exploration automated). |
 | `scripts/validate-quality-gates.ps1` | Checks required v2 files, local-only file isolation, version, and public-tree secret patterns. |
+| `SENIOR_MONITOR.md` | Mandatory post-work certification rubric and fail-closed decision model. |
+| `scripts/senior-monitor.ps1` | Deterministic post-work hygiene/evidence gate; raw output stays in `temp/`. |
 
 ---
 
