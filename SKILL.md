@@ -4,7 +4,7 @@ description: Advanced portable engineering standard for AI agents building and o
 <<<<<<< HEAD
 version: 2.1.0
 =======
-version: 2.2.0
+version: 2.3.0
 >>>>>>> f6fbf45 (feat: add senior monitor certification stage)
 author: Karim-(KaReem Elhlag)-Abdelhady
 license: Proprietary — all rights reserved. See README.md.
@@ -15,6 +15,8 @@ license: Proprietary — all rights reserved. See README.md.
 # KMG Agent Skill — Portable SaaS/ERP Engineering Standard
 
 > v2.2.0 adds the mandatory **Senior Monitor** post-work certification stage.
+
+> The reusable service-extraction procedure is documented in `SERVICE_EXTRACTION_PLAYBOOK.md`.
 
 ## 1. What this skill is
 

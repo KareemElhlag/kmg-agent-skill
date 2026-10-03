@@ -2,7 +2,7 @@
 
 # kmg-agent-skill v2.1.0
 
-Current release: **2.2.0**
+Current release: **2.3.0**
 
 **Author / Developer / Owner:** Karim-(KaReem Elhlag)-Abdelhady
 **Contact Email:** kareemelhlag@gmail.com
@@ -37,6 +37,7 @@ defect class, not to generic best practice.
 | `scripts/validate-quality-gates.ps1` | Checks required v2 files, local-only file isolation, version, and public-tree secret patterns. |
 | `SENIOR_MONITOR.md` | Mandatory post-work certification rubric and fail-closed decision model. |
 | `scripts/senior-monitor.ps1` | Deterministic post-work hygiene/evidence gate; raw output stays in `temp/`. |
+| `SERVICE_EXTRACTION_PLAYBOOK.md` | Reusable, fail-closed procedure for extracting a bounded service and reducing legacy-service coupling. |
 
 ---
 
