@@ -1,6 +1,6 @@
 <!-- Created By: Karim-(KaReem Elhlag)-Abdelhady -->
 
-# kmg-agent-skill
+# kmg-agent-skill v2.0.0
 
 **Author / Developer / Owner:** Karim-(KaReem Elhlag)-Abdelhady
 **Contact Email:** kareemelhlag@gmail.com
@@ -18,6 +18,9 @@ defect class, not to generic best practice.
 |---|---|
 | `SKILL.md` | The skill entry point: when to load it, token budgeting rules, temp isolation policy, the ten non-negotiables. |
 | `PLAYBOOK.md` | The full engineering playbook: task protocol, environment sync, clean architecture (DDD/CQRS/MediatR/EF Core), the Paid-Pack Triple, write-shape guard, evidence & live readback. |
+| `QUALITY_GATES.md` | Feature/review gates, complexity limits, maintainability rules, and accept/reject vocabulary. |
+| `PERFORMANCE.md` | Baselines, deltas, API/database/UI/job metrics, and default performance budgets. |
+| `NETWORK_AND_JOBS.md` | HTTP, SignalR, messaging, retry, idempotency, outbox, and job rules. |
 | `templates/structure.md` | Template for documenting a project's layer/membership structure and blast-radius mapping. |
 | `templates/business.md` | Template for documenting business rules, commercial packs, entitlements, and money invariants. |
 | `templates/workflow.md` | Template for task run records: stages, results, deltas, denominators, residue. |
@@ -28,6 +31,7 @@ defect class, not to generic best practice.
 | `scripts/read-blueprints.ps1` | Instant, bounded read of the blueprint set (structure → business → workflow, then project blueprints). |
 | `scripts/check-env.ps1` | P2.5 container/runtime sync readback: stale-container detection, port checks, dotnet watch vs run. |
 | `scripts/run-task-pipeline.ps1` | The pre-flight engine: automates P0 intake → P1/P2 scaffolds → P2.5 env readback → P3 blueprints → P4 searches in one command (~92% of exploration automated). |
+| `scripts/validate-quality-gates.ps1` | Checks required v2 files, local-only file isolation, version, and public-tree secret patterns. |
 
 ---
 

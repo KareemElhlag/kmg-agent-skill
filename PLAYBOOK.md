@@ -258,6 +258,14 @@ A review that produces no registered row produces nothing durable.
 
 ## §7 — Known-Gap Discipline
 
+## §7.1 — v2 Quality, Performance, and Reliability Gates
+
+The detailed acceptance rules live in `QUALITY_GATES.md`, `PERFORMANCE.md`, and `NETWORK_AND_JOBS.md`. They are part
+of the protocol, not optional reading, when a change touches a hot path, service boundary, realtime channel, or job.
+The review record must preserve baseline and changed measurements separately. Complexity, new warnings, missing
+timeouts, non-idempotent retries, and unverified runtime behavior are gates with an explicit decision; they are not
+silently deferred. Use `templates/feature-review.md` to register the decision and residue.
+
 Honesty is part of the protocol. Every unenforced behavior is recorded as a **Known Gap** with its evidence path and
 a next action: the failing SLO, the raw SQL in the wrong layer, the secret-scan that is documented but not CI-gated,
 the surface unproven at its required tiers. A gap imported into a mandatory baseline is a lie; a baseline that hides

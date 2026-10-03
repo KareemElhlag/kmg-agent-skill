@@ -2,7 +2,7 @@
 
 # kmg-agent-skill — Deliverable Summary
 
-**Date:** 2026-09-29 (v1.1.0 — automation layer added; base v1.0.0 delivered 2026-09-28)
+**Date:** 2026-10-03 (v2.0.0 — quality, performance, network, and job gates added)
 **Owner:** Karim-(KaReem Elhlag)-Abdelhady · kareemelhlag@gmail.com
 **Location:** `C:\Users\hp\source\repos\kmg-agent-skill\` (fully independent of any project repository tree)
 **Purpose:** portable AI-engineering skill distilled from the SaaS ERP platform experience — GitHub-ready.
@@ -17,12 +17,15 @@ The package is split by contract:
 - **Local (git-ignored, never leaves the machine):** `temp/` (scratch artifacts), `project.config.json`
   (real paths/ports/API bases), `field-lessons.md` (the agent's private incident log).
 
-## Files delivered (13 committed + .gitignore + 2 local)
+## Files delivered (18 committed + .gitignore + 2 local)
 
 | File | Content |
 |---|---|
 | `SKILL.md` | Entry point: what/when to load, token budgeting (6 hard rules) + measured outcomes, temp isolation + local-file contract, the ten non-negotiables, package layout, the failure modes it prevents. |
 | `PLAYBOOK.md` | The full engineering playbook: §1 task protocol `P0→P11` + classification; §2 Environment & Container Sync (`P2.5`, anti-stale-runtime); §3 Clean Architecture (DDD, CQRS/MediatR, EF Core, fail-closed); §4 the Paid-Pack Triple (grant writer · renewal biller · pinning tests); §5 Write-Shape Guard + fail-closed execution; §6 evidence contract + live readback; §7 known-gap discipline. |
+| `QUALITY_GATES.md` | Feature creation/review workflow, required gates, complexity thresholds, and decision vocabulary. |
+| `PERFORMANCE.md` | Measurement surfaces, baselines, deltas, and default budgets. |
+| `NETWORK_AND_JOBS.md` | Network, SignalR, messaging, outbox, retry, idempotency, and job rules. |
 | `README.md` | Usage for any AI agent (load order, protocol, evidence, templates, local-layer setup, pipeline automation), the strict Data Privacy & Security notice, IP/licensing/attribution. |
 | `SUMMARY.md` | This file — deliverable inventory and verification record. |
 | `project.config.example` | Committable config template: paths, ports, API bases, runtime map, scratch and knowledge conventions. |
@@ -35,6 +38,8 @@ The package is split by contract:
 | `scripts/read-blueprints.ps1` | Instant bounded read of the blueprint set: skill templates, then the project's own blueprints from `project.config.json`. |
 | `scripts/check-env.ps1` | P2.5 readback: `docker ps` + `docker inspect` (started-at vs newest binary = stale-runtime detection), port liveness, dotnet watch vs run. |
 | `scripts/run-task-pipeline.ps1` | The pre-flight engine: P0 verbatim intake → P1/P2 scaffolds → P2.5 env readback (gates RED on stale) → P3 blueprints → P4 targeted searches, all into `temp/`; ~92% of exploration/diagnosis automated. |
+| `scripts/validate-quality-gates.ps1` | Validates the v2 public package shape and scans committed material for secret patterns. |
+| `templates/feature-review.md` | Review, measurement, test, decision, and residue record. |
 | `.gitignore` | Isolates `temp/`, `project.config.json`, `field-lessons.md` by contract. |
 | `project.config.json` *(local)* | The real machine config, seeded from the source deployment. Never committed. |
 | `field-lessons.md` *(local)* | Seeded incident log (stale containers, the free-renewal trap). Never committed. |

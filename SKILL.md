@@ -1,7 +1,7 @@
 ---
 name: kmg-agent-skill
 description: Advanced portable engineering standard for AI agents building and operating complex multi-tenant SaaS ERP systems — task lifecycle protocol, clean architecture, container/runtime synchronization, financial entitlement integrity, and fail-closed execution discipline.
-version: 1.0.0
+version: 2.0.0
 author: Karim-(KaReem Elhlag)-Abdelhady
 license: Proprietary — all rights reserved. See README.md.
 ---
@@ -99,7 +99,22 @@ The full lifecycle lives in `PLAYBOOK.md`. Its pillars, in dependency order:
 | Write-shape & fail-closed execution | PLAYBOOK §5 | Every write verified by shape; every unresolved fact refused or explicit-unknown. |
 | Live readback & registration | PLAYBOOK §6 | Evidence contract: commands, numbers, deltas — no blended denominators. |
 
-## 6. The non-negotiables (read this even if you read nothing else)
+## 6. Quality gates and measured acceptance
+
+Version 2 adds explicit acceptance gates for feature creation, review, performance, networking, service-to-service
+communication, and background jobs. Load the smallest relevant reference before changing code:
+
+- `QUALITY_GATES.md` for severity, complexity, maintainability, test, and release thresholds.
+- `PERFORMANCE.md` for baseline/delta measurements and latency, query, job, and error budgets.
+- `NETWORK_AND_JOBS.md` for HTTP, SignalR, messaging, retries, idempotency, and job evidence.
+- `templates/feature-review.md` for a review record that ends in an accept/reject decision.
+- `scripts/validate-quality-gates.ps1` for deterministic hygiene and gate-shape validation.
+
+The workflow is fail-closed: intake → architecture map → baseline → implementation → focused checks → contract and
+runtime verification → performance delta → review decision → evidence registration. A missing measurement is
+`BLOCKED`, not a pass. A warning is tracked with an owner and due stage; warnings are never silently discarded.
+
+## 7. The non-negotiables (read this even if you read nothing else)
 
 1. **Classify before you touch.** Every change gets exactly one class with its trigger written down; a change
    touching permissions, feature keys, or schema is FEATURE minimum regardless of diff size.
@@ -115,7 +130,7 @@ The full lifecycle lives in `PLAYBOOK.md`. Its pillars, in dependency order:
 9. **Register every claim** with a row and a run record; `SKIPPED`/`BLOCKED`/`GATED` never count as passed.
 10. **Disclose the residue.** What did not run, with the missing prerequisite named — every time.
 
-## 7. Package layout
+## 8. Package layout
 
 ```
 kmg-agent-skill/
@@ -141,7 +156,7 @@ kmg-agent-skill/
 `temp/`, `project.config.json`, and `field-lessons.md` exist only on your machine — `.gitignore` enforces it,
 and `init-temp.*` verifies it.
 
-## 8. Failure modes this skill exists to prevent
+## 9. Failure modes this skill exists to prevent
 
 Each was met in production; each produced a wrong answer that *reconciled*:
 
@@ -153,7 +168,7 @@ Each was met in production; each produced a wrong answer that *reconciled*:
 - **The double bill** — a pack billed by both a dedicated renewal line and the generic pack line.
 - **The stale record** — a registry row asserting a state the code has left.
 
-## 9. Versioning
+## 10. Versioning
 
 Semantic versioning. Rules are added only when anchored to a new defect class with its evidence; existing rules
 are corrected by appending a dated correction, never by silent rewrite — the history is the value.
