@@ -1,11 +1,7 @@
 ---
 name: kmg-agent-skill
 description: Advanced portable engineering standard for AI agents building and operating complex multi-tenant SaaS ERP systems — task lifecycle protocol, clean architecture, container/runtime synchronization, financial entitlement integrity, and fail-closed execution discipline.
-<<<<<<< HEAD
-version: 2.1.0
-=======
-version: 2.3.0
->>>>>>> f6fbf45 (feat: add senior monitor certification stage)
+version: 2.4.0
 author: Karim-(KaReem Elhlag)-Abdelhady
 license: Proprietary — all rights reserved. See README.md.
 ---
@@ -14,9 +10,38 @@ license: Proprietary — all rights reserved. See README.md.
 
 # KMG Agent Skill — Portable SaaS/ERP Engineering Standard
 
+## Invocation
+
+Use the Codex skill mention **`$kmg-agent-skill`**. The shorthand `@kmg` is not a registered skill
+identifier, so it will not reliably resolve in the skill picker. The canonical local path is
+`C:\\Users\\hp\\.codex\\skills\\kmg-agent-skill\\SKILL.md`.
+
 > v2.2.0 adds the mandatory **Senior Monitor** post-work certification stage.
 
 > The reusable service-extraction procedure is documented in `SERVICE_EXTRACTION_PLAYBOOK.md`.
+
+## NexusCore UI/UX collaboration
+
+For NexusCore work that has a visible workflow, load `$nexusecore-ui-ux` alongside this skill.
+KMG owns lifecycle gates, architecture, data integrity, security, runtime synchronization, and evidence;
+NexuseCore UI/UX owns visual hierarchy, interaction states, accessibility, RTL, responsive behavior, and
+visual evidence. Keep the two skills independent, but use both whenever the task crosses their boundaries.
+
+## Flutter/Dart and security collaboration
+
+For Flutter or Dart work, load `$flutter-architect-review` alongside this skill when available. KMG owns lifecycle,
+evidence, ERP integrity, runtime synchronization, and certification; Flutter Architect Review owns Flutter/Dart
+architecture, state flow, widget boundaries, mobile performance, accessibility, RTL, and mobile UX evidence.
+
+For security review, defensive penetration-test planning, hardening, or vulnerability triage, load
+`$cyber-kmg-security` alongside this skill when available. KMG owns fail-closed delivery and ERP consequences;
+Cyber KMG Security owns authorization scope, attack-surface mapping, safe test selection, evidence isolation,
+severity calibration, and remediation/retest discipline.
+
+## Required closing report
+
+Every completed task ends with: **تم إنجازه**, **تم تحسينه**, and **المتبقي**. Include evidence for claims,
+call out unverified work, and name the next highest-value improvement so the workflow can keep expanding safely.
 
 ## 1. What this skill is
 
@@ -94,6 +119,19 @@ skill is deployed into a project). The rules:
   `field-lessons.md` (the agent's incident log — e.g. the stale-container lesson, the free-renewal trap) are
   git-ignored by contract; only their sanitized `*.example` templates are ever committed.
 
+### 4.1 `.claude/skills` visibility inside a git worktree
+
+A background agent running inside an isolated `git worktree` (e.g. via the `Agent` tool's
+`isolation: "worktree"`) shares the repository's git history but gets its own working-tree checkout. If
+`.claude/skills/` (this skill, and any sibling skill) is itself git-tracked, the worktree checkout *does* contain
+it at the same relative path, and the skill loads normally. If it is instead untracked (local-only, `.gitignore`d,
+or living outside the repo's tracked tree — e.g. synced only to the main checkout by an external tool), a
+worktree agent will not see it at all, and silently falls back to no skill guidance rather than erroring loudly.
+**Before delegating work into an isolated worktree, confirm `git ls-files .claude/skills` returns the expected
+files from the repository root** — a worktree inherits only what git tracks, never what merely exists on disk in
+the main checkout. If a needed skill file is untracked, either track it (if it contains no secrets/local paths)
+or pass its essential content inline in the agent's prompt instead of assuming the worktree can load it.
+
 ## 5. The engineering core (what the playbook encodes)
 
 The full lifecycle lives in `PLAYBOOK.md`. Its pillars, in dependency order:
@@ -124,9 +162,9 @@ runtime verification → performance delta → review decision → evidence regi
 
 ## 6.1 Role routing
 
-Every task uses exactly one primary role and may consult the other roles when the blast radius crosses layers. All three
-roles are software architects/designers and security-aware reviewers; their specialization changes the evidence they
-require, not the quality bar:
+Every task uses exactly one primary role and may consult the other roles when the blast radius crosses layers. All roles
+are software architects/designers and security-aware reviewers; their specialization changes the evidence they require,
+not the quality bar:
 
 - `roles/general-software-architect.md`: use for language-agnostic design, service boundaries, data contracts,
   threat modeling, maintainability, and cross-cutting reviews.
@@ -134,11 +172,47 @@ require, not the quality bar:
   .NET service-to-service communication.
 - `roles/frontend-architect.md`: use when the change includes React, TypeScript, Vite, Tailwind, browser state,
   accessibility, UI security, or frontend-to-API contracts.
+- `roles/flutter-dart-architect.md`: use when the change includes Flutter, Dart, mobile state management, mobile
+  offline/sync behavior, platform integration, widget performance, mobile accessibility, or Flutter UI flows.
+- `roles/security-pentest-architect.md`: use when the change includes authentication, authorization, tenant isolation,
+  secrets, cryptography, containers, CI/CD, vulnerability triage, hardening, or authorized defensive penetration testing.
+- `roles/ux-quality-architect.md`: use when the change has a visible workflow and needs usability, dense ERP interaction,
+  loading/error/empty states, accessibility, RTL, responsive behavior, or visual evidence.
 
 Route by the files and runtime actually touched, not by the feature title. If both backend and frontend are changed,
 select the dominant risk as primary and explicitly run the other role's contract checklist. The general role remains the
 tie-breaker for architecture and security decisions. Never apply a role's framework preference against the repository's
 existing architecture without recording the trade-off.
+
+## 6.2 Multi-agent execution council
+
+Use multi-agent execution when the task is large enough that independent implementation, review, security, UX, or final
+certification work can run in parallel without writing over the same files. Do not spawn agents for tiny edits, isolated
+content changes, or work where one local pass is cheaper and safer.
+
+Read `MULTI_AGENT_ORCHESTRATION.md` before running a multi-agent task. The default council is:
+
+- **Implementer Agent**: applies the scoped change in the agreed write set.
+- **Reviewer/Fixer Agent**: reviews architecture, tests, regressions, and maintainability; may patch only an assigned,
+  non-overlapping write set.
+- **Security Agent**: checks authorization, tenant boundaries, secrets, validation, containers, CI/CD, and safe defensive
+  security evidence.
+- **UX Agent**: checks workflow usability, loading/error/empty states, accessibility, RTL, responsiveness, and visual
+  evidence for visible surfaces.
+- **Senior Monitor**: performs final certification after implementation, focused checks, and specialist reviews. It does
+  not rubber-stamp; it returns `CERTIFIED`, `CERTIFIED_WITH_RESIDUE`, `REWORK_REQUIRED`, or `BLOCKED`.
+
+The orchestrating agent remains accountable. Subagents produce evidence and recommendations; they do not expand scope,
+authorize production testing, push code, or certify their own changes. Conflicts are resolved by the orchestrator using
+the current artifact state, tests, runtime readbacks, and KMG's fail-closed rules.
+
+All agents work for the same repository and accepted task scope. Each agent must return a final status before Senior
+Monitor certification:
+
+- `DONE`
+- `FINDINGS_ONLY`
+- `REWORK_REQUIRED`
+- `BLOCKED`
 
 ## 7. The non-negotiables (read this even if you read nothing else)
 
@@ -163,6 +237,7 @@ kmg-agent-skill/
 ├── SKILL.md                 ← this file (entry point — load first)
 ├── PLAYBOOK.md              ← the full engineering playbook (P0→P11, architecture, money, gates)
 ├── README.md                ← usage, data-privacy & security policy, licensing & attribution
+├── MULTI_AGENT_ORCHESTRATION.md ← implementer/reviewer/security/UX/Senior Monitor council protocol
 ├── SUMMARY.md               ← deliverable inventory & verification record
 ├── roles/                   ← scoped architecture, design, and security review roles
 ├── project.config.example   ← committable config template — copy to project.config.json (local only)
@@ -194,6 +269,18 @@ Each was met in production; each produced a wrong answer that *reconciled*:
 - **The free renewal** — a paid pack whose entitlement flag was never written by the fulfilment path.
 - **The double bill** — a pack billed by both a dedicated renewal line and the generic pack line.
 - **The stale record** — a registry row asserting a state the code has left.
+- **The masked build failure** — `docker compose build ... | tail -N; echo "$?"` (or any pipe) reports the
+  *pipe's* exit code, not the build's; a real compile failure under a truncating pipe has reconciled as success
+  more than once in this project's own history. Always capture the build command's own exit code directly
+  (`cmd; ec=$?` or PowerShell's `$LASTEXITCODE`/`$?` read immediately after, before any other command runs), and
+  only then optionally view a tail of the saved log.
+- **The no-network `--no-cache` trap** — `docker compose build --no-cache` forces a full rebuild, which requires
+  re-pulling base images and packages; on a disconnected or restricted network it can fail outright, or (worse)
+  silently fall back to whatever cached layers Docker still has despite `--no-cache`, depending on daemon
+  behavior and registry mirror config. Before relying on `--no-cache` as "proof of a fresh build," confirm
+  network reachability to the registries the Dockerfile actually pulls from, and verify freshness directly
+  against the artifact (file timestamp *inside* the running container, e.g. `docker exec <container> stat
+  <dll-or-bundle>`), never against the build log's own claim of success alone.
 
 ## Senior Monitor (mandatory post-work certification)
 
